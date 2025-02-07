@@ -13,6 +13,7 @@
             height: 100vh;
             background-color: #ffe6e6; /* Soft pink background */
             margin: 0;
+            overflow: hidden; /* Prevents scrolling */
         }
 
         .popup {
@@ -22,6 +23,7 @@
             border-radius: 12px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
             position: relative;
+            width: 320px;
         }
 
         h2 {
@@ -33,7 +35,8 @@
             margin-top: 20px;
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 20px; /* Ensures No button starts next to Yes button */
+            position: relative;
         }
 
         .btn {
@@ -53,14 +56,9 @@
         .no-btn {
             background-color: gray;
             color: white;
-            position: relative;
+            position: relative; /* Starts in place, moves later */
         }
 
-        .no-btn:hover {
-            position: absolute;
-            left: calc(1% + (10% * Math.random()));
-            top: calc(1% + (10% * Math.random()));
-        }
     </style>
 </head>
 <body>
@@ -69,22 +67,33 @@
         <h2>Will you be my Valentine? ❤️</h2>
         <div class="buttons">
             <button class="btn yes-btn" onclick="accept()">Yes</button>
-            <button class="btn no-btn" id="noBtn">No</button>
+            <button class="btn no-btn" id="noBtn" onclick="reject()">No</button>
         </div>
     </div>
 
     <script>
         const noBtn = document.getElementById("noBtn");
+        const popup = document.querySelector(".popup");
 
         noBtn.addEventListener("mouseover", function () {
-            const x = Math.random() * (window.innerWidth - 150);
-            const y = Math.random() * (window.innerHeight - 150);
-            noBtn.style.left = x + "px";
-            noBtn.style.top = y + "px";
+            const popupRect = popup.getBoundingClientRect();
+            const maxX = popupRect.width - noBtn.clientWidth - 20; /* Keeps No button inside */
+            const maxY = popupRect.height - noBtn.clientHeight - 20;
+
+            const x = Math.random() * maxX;
+            const y = Math.random() * maxY;
+
+            noBtn.style.position = "absolute"; /* Moves when hovered */
+            noBtn.style.left = `${x}px`;
+            noBtn.style.top = `${y}px`;
         });
 
         function accept() {
-            alert("Heyy! You made my day girl!!❤️😊 But wait..did you just say YES?😳 Sry I'm not available for you!!");
+            alert("Heyyy! You made my day girl!!❤️😊 But wait... did you just say YES? 😳 Sry I'm not available for you!!");
+        }
+
+        function reject() {
+            alert("Heyy! That’s not fair, young lady! You need to select only the Yes button.😜");
         }
     </script>
 
